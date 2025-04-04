@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import { createGlobalStyle } from "styled-components"
 import reset from "styled-reset"
+import { auth } from "./firebase"
 
 // components
 import Layout from "./components/layout"
@@ -53,6 +54,7 @@ function App() {
 
   const init = async () => {
     // wait for firebase
+    await auth.authStateReady();
     setLoading(false);
   }
 
