@@ -1,9 +1,10 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import { auth } from "../firebase";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
 
+/* styled components */
 const Wrapper = styled.div`
   height: 100%;
   display: flex;
@@ -46,13 +47,16 @@ const Error = styled.span`
  `;
 
 export default function CreateAccount() {
-  const navigate = useNavigate();
+  // state
   const [isLoading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  const navigate = useNavigate();
+
+  // handler
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { target: { name, value } } = event;
     if (name === "name") {
@@ -65,19 +69,20 @@ export default function CreateAccount() {
     }
   }
 
-  const onSubmit = async (evnet: React.FormEvent<HTMLFormElement>) => {
-    evnet.preventDefault();
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     if(isLoading || name === "" || email === "" || password === "") {
       return;
     }
+
     try {
       setLoading(true);
-      const credentials = await createUserWithEmailAndPassword(
+      const credentials = await createUserWithEmailAndPassword(    // 사용자 email 계정 등록
         auth, 
         email, 
         password
       );
-      console.log(credentials.user);
+      //console.log("credentials", credentials.user);
       await updateProfile(credentials.user, {    // 사용자 계정 이름 받아오기
         displayName: name
       });
@@ -87,12 +92,14 @@ export default function CreateAccount() {
     } finally {
       setLoading(false);
     }
-    console.log(name, email, password);
+    //console.log(name, email, password);
   }
 
   return (
     <Wrapper>
+
       <Title>Join 𝕏</Title>
+
       <Form onSubmit={onSubmit}>
         <Input
           onChange={onChange}
@@ -114,7 +121,9 @@ export default function CreateAccount() {
           type="password" />
         <Input type="submit" value={isLoading ? "Loading..." : "Create Account"} />
       </Form>
+
       {error !== "" ? <Error>{error}</Error>: null}
+
     </Wrapper>
   )
 }
