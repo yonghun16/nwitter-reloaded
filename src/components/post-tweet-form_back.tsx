@@ -1,3 +1,7 @@
+/* canvas.toDataURL() :  캔버스에 그려진 내용을 이미지로 “인코딩”해서 문자열(base64 포맷 포함)로 반환하는 함수.
+ *
+ */
+
 import styled from "styled-components";
 import { useState, useRef, useEffect } from "react";
 import { db, auth } from "../firebase";
@@ -78,7 +82,7 @@ const DrawingCanvas = styled.canvas`
   pointer-events: auto;
   width: 100%;
   height: 100%;
-  cursor: crosshair;
+  cursor: crosshair;     /*  마우스를 올렸을 때 커서가 십자 모양(+) 으로 바뀜 */
 `;
 
 const ClearButton = styled.button`
@@ -109,17 +113,19 @@ export default function PostTweetForm() {
     setTweet(e.target.value);
   };
 
+  // 파일 업로드가 된다면
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
     if (files && files.length === 1) {
       const selectedFile = files[0];
       setFile(selectedFile);
 
-      const reader = new FileReader();
+      const reader = new FileReader();          // FileReader는 '비동기적'으로 동작함.
+      reader.readAsDataURL(selectedFile);       // 선택된 파일을 base64로 읽어 reader.result에 반환함. 
+                                                // onload : 파일 읽기에 성공했을 때 자동 호출됨.  onerror : 파일 읽기에 실패했을 때 실행됨.  onloadend : 성공 여부와 관계없이 읽기 작업이 끝났을 때 실행됨.
       reader.onloadend = () => {
         setPreview(reader.result as string);
       };
-      reader.readAsDataURL(selectedFile);
     }
   };
 
@@ -132,8 +138,9 @@ export default function PostTweetForm() {
         canvas.height = img.naturalHeight;
       };
     }
-  }, [preview]);
+  }, [preview]);   // preview state가 변경된 때만 적용
 
+  /* ---------  Canvas methods ---------- */
   const getCanvasCoords = (
     e: MouseEvent | TouchEvent,
     canvas: HTMLCanvasElement
@@ -189,7 +196,9 @@ export default function PostTweetForm() {
   const stopDrawing = () => {
     setIsDrawing(false);
   };
+  /* ----------------------------------------------- */
 
+  // canvas를 초기화
   const clearCanvas = () => {
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext("2d");
@@ -198,43 +207,48 @@ export default function PostTweetForm() {
     }
   };
 
+  // canvas와 이미지를 합치고 base64 문자열로 변환
   const mergeImageAndCanvas = (): Promise<string | null> => {
-    const canvas = document.createElement("canvas");
-    const img = new Image();
-    if (!preview || !canvasRef.current) return Promise.resolve(null);
+    const canvas = document.createElement("canvas");                      // 새 canvas 요소를 만듦 (DOM에는 추가 안됨, 메모리상 작업용)
+    const img = new Image();                                              // img는 이미지 객체(HTMLImageElement를 생성하는 브라우저 내장 생성자 함수)
+    if (!preview || !canvasRef.current) return Promise.resolve(null);     // preview나 canvasRef.current가 없으면 아무 작업도 하지 않고 null 반환
 
     img.src = preview;
 
-    return new Promise((resolve) => {
-      img.onload = () => {
+    return new Promise((resolve) => {                                     // 비동기 작업이 성공했을 때 resolve(), 실패을 때 reject()
+      img.onload = () => {                                                // img가 로드되면
         canvas.width = img.width;
         canvas.height = img.height;
-        const ctx = canvas.getContext("2d");
+        const ctx = canvas.getContext("2d");                              // HTML <canvas> 요소에서 그림을 그릴 수 있는 2D 컨텍스트를 가져오는 코드
         if (!ctx) return resolve(null);
 
-        ctx.drawImage(img, 0, 0);
-        ctx.drawImage(canvasRef.current!, 0, 0);
+        ctx.drawImage(img, 0, 0);                                         // 먼저 배경 이미지 그리기
+        ctx.drawImage(canvasRef.current!, 0, 0);                          // 그 위에 사용자가 그린 캔버스 덮어 그리기
 
-        const merged = canvas.toDataURL("image/jpeg", 0.9);
-        resolve(merged);
+        const merged = canvas.toDataURL("image/jpeg", 0.9);               // canvas.toDataURL("image/jpeg", 0.9)를 이용해 base64 이미지로 변환
+        resolve(merged);                                                  // 비동기 작업이 성공했을 때 merget 반환
       };
     });
   };
 
+  // 트윗 전송(Submit)
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const user = auth.currentUser;
 
-    if (!user || isLoading || tweet === "" || tweet.length > 180) return;
+    // 유효성 검사
+    const user = auth.currentUser;
+    if (!user || isLoading || tweet === "" || tweet.length > 180) return;  // 로그인 유저가 없거나, 현재 로딩중이거나, 트윗 내용이 비어있거나, 트윗이 180자를 초과하면 리턴
 
     try {
       setLoading(true);
 
+      // 이미지 압축
       let base64Image = null;
-      if (file && preview) {
-        base64Image = await mergeImageAndCanvas();
+      if (file && preview) {  // 파일과 preview가 있을 때
+        base64Image = await mergeImageAndCanvas(); // mergeImageAndCanvas() 함수로 이미지를 처리하여 base64 문자열로 전환
       }
 
+      // 데이터 콜렉션에 추가
       await addDoc(collection(db, "tweets"), {
         tweet,
         createdAt: Date.now(),
@@ -243,6 +257,7 @@ export default function PostTweetForm() {
         image: base64Image,
       });
 
+      // 전송 후 화면 초기화
       setTweet("");
       setFile(null);
       setPreview(null);
