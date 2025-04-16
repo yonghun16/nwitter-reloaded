@@ -1,5 +1,6 @@
 import { styled } from "styled-components";
 import { ITweet } from "./timeline";
+import { auth } from "../firebase"
 
 const Wrapper = styled.div`
   display: grid;
@@ -31,12 +32,26 @@ const Payload = styled.p`
   font-size: 18px;
 `;
 
+const DeleteButton = styled.button`
+  background-color: tomato;
+  color: white;
+  font-weight: 600;
+  border: 0;
+  font-size: 12px;
+  padding: 5px 10px;
+  text-transform: uppercase;
+  border-radius: 5px;
+  cursor: pointer;
+`;
+
 export default function Tweet({ username, image, tweet }: ITweet) {
+  const user = auth.currentUser;
   return (
     <Wrapper>
       <Column>
         <Username>{username}</Username>
         <Payload>{tweet}</Payload>
+        {user?.uid === username && <DeleteButton>Delete</DeleteButton>}
       </Column>
       <Column>
       {image ? (
