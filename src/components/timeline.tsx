@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { db } from "../firebase";
-import { getDocs, collection, query, orderBy, onSnapshot, limit, Unsubscribe } from "firebase/firestore";
+import { collection, query, orderBy, onSnapshot, limit, Unsubscribe } from "firebase/firestore";
 import Tweet from "./tweet";
 
 // interfaces
@@ -16,8 +16,9 @@ export interface ITweet {
 
 const Wrapper = styled.div`
   display: flex;
-  flex-direction: column;
   gap: 10px;
+  flex-direction: column;
+  overflow-y: scroll;
 `;
 
 export default function Timeline() {
