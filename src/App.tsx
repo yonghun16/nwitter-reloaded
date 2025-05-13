@@ -74,8 +74,9 @@ function App() {
   // 로딩 상태
   const [isLoading, setLoading] = useState(true);
 
-  // wait for firebase
+  // 앱 초기화
   const init = async () => {
+    // wait for firebase
     await auth.authStateReady();
     setLoading(false);
   }
