@@ -44,13 +44,17 @@ const MenuItem = styled.div`
 /* Layout 컴포넌트 */
 export default function Layout() {
   const navigate = useNavigate();
+
+  // logout
   const onLogOut = async () => {
     const ok = confirm("Are you sure?");
     if (ok) {
-      await auth.signOut();
+      await auth.signOut();                   // Firebase를 이용한 로그아웃
       navigate("/login");
     }
   }
+
+  // render
   return (
     <Wrapper>
 
