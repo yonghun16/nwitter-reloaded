@@ -1,3 +1,4 @@
+/* library import */
 import { styled } from "styled-components";
 import { ITweet } from "./timeline";
 import { auth, db } from "../firebase";
@@ -45,6 +46,7 @@ const DeleteButton = styled.button`
   cursor: pointer;
 `;
 
+/* Tweet component */
 export default function Tweet({ username, image, tweet, userId, id }: ITweet) {
   const user = auth.currentUser;
   const onDelete = async () => {
