@@ -1,22 +1,17 @@
+/* library import */
 import { useState } from "react"
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { auth } from "../firebase";
 import { FirebaseError } from "firebase/app";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { Link } from "react-router-dom";
 import GithubButton from "../components/github-btn";
-import {
-  Error,
-  Form,
-  Input,
-  Switcher,
-  Title,
-  Wrapper,
-} from "../components/auth-components";
+// styled components
+import { Error, Form, Input, Switcher, Title, Wrapper } from "../components/auth-components";
 
 
+/* Login components */
 export default function CreateAccount() {
-  // state
+  // states
   const [isLoading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,7 +19,7 @@ export default function CreateAccount() {
 
   const navigate = useNavigate();
 
-  // handler
+  // onChange handler
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { target: { name, value } } = event;
     if (name === "email") {
@@ -35,6 +30,7 @@ export default function CreateAccount() {
     }
   }
 
+  // onSubmit handler
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError("");
@@ -42,13 +38,13 @@ export default function CreateAccount() {
       return;
     }
 
-    try {  // Login 시도
+    try {                                                         // Login 시도
       setLoading(true);
-      await signInWithEmailAndPassword(auth, email, password);  // 로그인 처리
-      navigate("/");    // 에러가 없다면, 
-    } catch (error) {
+      await signInWithEmailAndPassword(auth, email, password);    // 로그인 처리 
+      navigate("/");                                              // 에러가 없다면 로그인 후 home으로 이동
+    } catch (error) {                                             // 에러 발생시
       if (error instanceof FirebaseError) {
-        setError(error.message);
+        setError(error.message);                                  // 에러 출력
       }
     } finally {
       setLoading(false);
@@ -56,6 +52,7 @@ export default function CreateAccount() {
     //console.log(name, email, password);
   }
 
+  // render
   return (
     <Wrapper>
 
@@ -79,12 +76,16 @@ export default function CreateAccount() {
         <Input type="submit" value={isLoading ? "Loading..." : "Log in"} />
       </Form>
 
+      {/* 에러 발생 시 에러 표시 */}
       {error !== "" ? <Error>{error}</Error> : null}
+
       <Switcher>
         Don't have an account?{" "}
         <Link to="/create-account">Sign up</Link>
       </Switcher>
+
       <GithubButton />
+
     </Wrapper>
   )
 }
