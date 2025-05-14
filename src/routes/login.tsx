@@ -67,13 +67,15 @@ export default function CreateAccount() {
           name="email"
           value={email}
           placeholder="Email"
-          type="email" />
+          type="email" 
+          autoComplete="username"/>
         <Input
           onChange={onChange}
           name="password"
           value={password}
           placeholder="Password"
-          type="password" />
+          type="password"
+          autoComplete="password"/>
         <Input type="submit" value={isLoading ? "Loading..." : "Log in"} />
       </Form>
 
