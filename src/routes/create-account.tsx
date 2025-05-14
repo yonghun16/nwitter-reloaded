@@ -56,18 +56,18 @@ export default function CreateAccount() {
     // firbase 연동하여 회원가입
     try {
       setLoading(true);
-      const credentials = await createUserWithEmailAndPassword(    // firbase 사용자 email 계정 등록
+      const credentials = await createUserWithEmailAndPassword(    // firbase 사용자 email 계정 등록하고 credentials에 반환
         auth, 
         email, 
         password
       );
       //console.log("credentials", credentials.user);             // 디벼깅용
-      await updateProfile(credentials.user, {                     // 등록한 firbase 사용자 계정 이름 받아오기
+      await updateProfile(credentials.user, {                     // 가입한(credentials.user) 계정의 displayName을 firbase에 업데이트
         displayName: name
       });
       navigate("/");                                              // 로그인 페이지로 이동
     } catch (error) {                                             // error 발생 시 error message 출력
-      if (error instanceof FirebaseError) {
+      if (error instanceof FirebaseError) {                       // 이 에러가 Firebase에서 발생한 것인지 판단
         setError(error.message);
       }
     } finally {
