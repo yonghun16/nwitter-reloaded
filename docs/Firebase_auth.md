@@ -1,4 +1,6 @@
 ### firbase 인증에 대한 코드 예제 (Vanilla JS + Firebase Modular SDK)
+
+
 #### firbase.js
 ```js
 // firebase.js
@@ -85,4 +87,28 @@ document.getElementById("logout-btn").addEventListener("click", () => {
 <br/><br/>
 
 <button id="logout-btn">로그아웃</button>
+```
+
+### updateProfile()
+- firebase/auth의 updateProfile() 함수는 현재 로그인한 사용자의 프로필 정보를 업데이트할 때 사용되는 Firebase Authentication 함수입니다. 주로 사용자 이름(표시 이름)과 프로필 사진 URL을 수정할 때 사용됩니다.
+
+#### 파라미터
+- user: 업데이트할 사용자 객체 (auth.currentUser로 가져올 수 있음)
+- profile: 업데이트할 정보가 담긴 객체
+  - displayName (문자열): 사용자 표시 이름
+  - photoURL (문자열): 프로필 사진의 URL
+```js
+import { getAuth, updateProfile } from "firebase/auth";
+
+const auth = getAuth();
+const user = auth.currentUser;
+
+updateProfile(user, {
+  displayName: "새로운 이름",
+  photoURL: "https://example.com/photo.jpg"
+}).then(() => {
+  console.log("프로필 업데이트 성공");
+}).catch((error) => {
+  console.error("프로필 업데이트 실패:", error);
+});
 ```
