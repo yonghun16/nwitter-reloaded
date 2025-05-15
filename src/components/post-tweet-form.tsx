@@ -142,7 +142,7 @@ export default function PostTweetForm() {
   // onSubmit Event
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const user = auth.currentUser;
+    const user = auth.currentUser;                    // 현재 로그인된 사용자의 auth(firebase 인증) 객체를 불러옴
 
     if (!user || isLoading || tweet === "" || tweet.length > 180) return;
 
@@ -154,20 +154,22 @@ export default function PostTweetForm() {
         base64Image = await compressImage(file);      // ✅ 압축된 이미지 사용
       }
 
-      await addDoc(collection(db, "tweets"), {
-        tweet,
-        createdAt: Date.now(),
-        username: user.displayName || "Anonymous",
-        userId: user.uid,
-        image: base64Image,
+      await addDoc(collection(db, "tweets"), {        // Firestore 콜렉션에 하나의 문서 추가하는 비동기 함수
+        tweet,                                        // 트윗 내용
+        createdAt: Date.now(),                        // 트윗 생성 시간
+        username: user.displayName || "Anonymous",    // 로그인 사용자 이름
+        userId: user.uid,                             // 로그인 사용자 UID
+        image: base64Image,                           // 이미지 
       });
 
-      setTweet("");
-      setFile(null);
-      setPreview(null);                               // ✅ 미리보기 초기화
-    } catch (error) {
+      setTweet("");                                   // 트윗 초기화
+      setFile(null);                                  // 파일 초기화
+      setPreview(null);                               // 미리보기 초기화
+    } 
+    catch (error) {                                   // 에러 처리
       console.error("Upload failed:", error);
-    } finally {
+    } 
+    finally {                                         // 전부 완료시 로딩 완료
       setLoading(false);
     }
   };
