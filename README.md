@@ -1,54 +1,17 @@
-# React + TypeScript + Vite
+# Nwitter 클론코딩
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# 🚧 공사중 🚧
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+### 추가할 기능
+- 포스트 수정 -> 모달 띄워 수정사항 입력 폼 만들기
+- 닉네임 수정 -> 모달 띄워 수정사항 입력 폼 만들기 
+  - 모달을 공통 컴포넌트로 만들기
+  - 모달 사용을 Custom hook으로 만들기
+- redux를 사용해 컴포넌트간 상태 변경하기
+- redux를 사용해 테마 변경 기능 만들기
+- 회원탈퇴 기능 만들기
+- 왼쪽 sidebar 만들기
+- 반응형으로 추가하기
+- 포스트 검색 기능 만들기
+- 좀더 x.com에 맞게 꾸미기
+  - 오른쪽 하단에 아바타보이기 -> 누르면 로그아웃 할건지 물어보기
