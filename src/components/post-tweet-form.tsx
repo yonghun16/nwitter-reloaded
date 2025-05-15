@@ -82,16 +82,16 @@ export default function PostTweetForm() {
 
   // onChange Event : 파일 상태 변경(저장)
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = e.target;              // e.target.files는 FileList 객체, files에 file들이 배열처럼 담겨 있음.
-    if (files && files.length === 1) {       // file이 있고, file의 갯수가 1개일 때
-      const selectedFile = files[0];         // 첫번째 파일을 선택
-      setFile(selectedFile);                 // file를 state에 저장
+    const { files } = e.target;                   // e.target.files는 FileList 객체, files에 file들이 배열처럼 담겨 있음.
+    if (files && files.length === 1) {            // file이 있고, file의 갯수가 1개일 때
+      const selectedFile = files[0];              // 첫번째 파일을 선택
+      setFile(selectedFile);                      // file를 state에 저장
 
-      const reader = new FileReader();       // FileReader는 브라우저 내장 객체, 비동기적 작동, 파일을 내용을 읽음. 텍스트나 이미지 파일을 base64 형태 등으로 변환.
-      reader.onloadend = () => {             // 파일을 다 읽었을 때 실행되는 콜백 함수
-        setPreview(reader.result as string); // FileReader에 의해 변환된 Base64 문자열을 preview 상태에 저장
+      const reader = new FileReader();            // FileReader는 브라우저 내장 객체, 비동기적 작동, 파일을 내용을 읽음. 텍스트나 이미지 파일을 base64 형태 등으로 변환.
+      reader.onloadend = () => {                  // 파일을 다 읽었을 때 실행되는 콜백 함수
+        setPreview(reader.result as string);      // FileReader에 의해 변환된 Base64 문자열을 preview 상태에 저장
       };
-      reader.readAsDataURL(selectedFile);    // Base64로 변환해서 reader.result에 담김
+      reader.readAsDataURL(selectedFile);         // Base64로 변환해서 reader.result에 담김
     }
   };
 

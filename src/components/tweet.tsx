@@ -4,6 +4,8 @@ import { ITweet } from "./timeline";
 import { auth, db } from "../firebase";
 import { deleteDoc, doc } from "firebase/firestore";
 
+
+/* styled components */
 const Wrapper = styled.div`
   display: grid;
   grid-template-columns: 3fr 1fr;
@@ -46,32 +48,40 @@ const DeleteButton = styled.button`
   cursor: pointer;
 `;
 
+
 /* Tweet component */
-export default function Tweet({ username, image, tweet, userId, id }: ITweet) {
+export default function Tweet({ username, image, tweet, userId, id }: ITweet) {    // props
   const user = auth.currentUser;
+
+  // onDelete function
   const onDelete = async () => {
     const ok = confirm("Are you sure?");
     if (!ok || !user || user?.uid !== userId) return;
     try {
-      await deleteDoc(doc(db, "tweets", id));
+      await deleteDoc(doc(db, "tweets", id));     // Firestore의 document를 삭제
     } catch(error) {
       console.log(error);
     } finally {
 
     }
   }
+
+  // render
   return (
     <Wrapper>
+
       <Column>
         <Username>{username}</Username>
         <Payload>{tweet}</Payload>
         {user?.uid === userId ? <DeleteButton onClick={onDelete}>Delete</DeleteButton> : null}
       </Column>
+
       <Column>
-        {image ? (
-          <Photo src={`${image}`} />
-        ) : null}
+        {image 
+          ? ( <Photo src={`${image}`} /> ) 
+          : null}
       </Column>
+
     </Wrapper>
   )
 }
