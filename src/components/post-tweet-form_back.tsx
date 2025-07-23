@@ -80,9 +80,8 @@ const DrawingCanvas = styled.canvas`
   top: 0;
   left: 0;
   pointer-events: auto;
-  width: 100%;
-  height: 100%;
-  cursor: crosshair;     /*  마우스를 올렸을 때 커서가 십자 모양(+) 으로 바뀜 */
+  cursor: crosshair;
+  /* width/height 제거 - 실 해상도는 useEffect에서 설정 */
 `;
 
 const ClearButton = styled.button`
@@ -122,7 +121,7 @@ export default function PostTweetForm() {
 
       const reader = new FileReader();          // FileReader는 '비동기적'으로 동작함.
       reader.readAsDataURL(selectedFile);       // 선택된 파일을 base64로 읽어 reader.result에 반환함. 
-                                                // onload : 파일 읽기에 성공했을 때 자동 호출됨.  onerror : 파일 읽기에 실패했을 때 실행됨.  onloadend : 성공 여부와 관계없이 읽기 작업이 끝났을 때 실행됨.
+      // onload : 파일 읽기에 성공했을 때 자동 호출됨.  onerror : 파일 읽기에 실패했을 때 실행됨.  onloadend : 성공 여부와 관계없이 읽기 작업이 끝났을 때 실행됨.
       reader.onloadend = () => {
         setPreview(reader.result as string);
       };
@@ -132,13 +131,27 @@ export default function PostTweetForm() {
   useEffect(() => {
     const canvas = canvasRef.current;
     const img = imageRef.current;
-    if (canvas && img) {
-      img.onload = () => {
-        canvas.width = img.naturalWidth;
-        canvas.height = img.naturalHeight;
-      };
-    }
-  }, [preview]);   // preview state가 변경된 때만 적용
+    if (!canvas || !img) return;
+
+    const resize = () => {
+      const width = img.clientWidth;
+      const height = img.clientHeight;
+
+      if (width && height) {
+        canvas.width = width;
+        canvas.height = height;
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
+      }
+    };
+
+    const observer = new ResizeObserver(resize);
+    observer.observe(img);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [preview]);
 
   /* ---------  Canvas methods ---------- */
   const getCanvasCoords = (
@@ -209,25 +222,31 @@ export default function PostTweetForm() {
 
   // canvas와 이미지를 합치고 base64 문자열로 변환
   const mergeImageAndCanvas = (): Promise<string | null> => {
-    const canvas = document.createElement("canvas");                      // 새 canvas 요소를 만듦 (DOM에는 추가 안됨, 메모리상 작업용)
-    const img = new Image();                                              // img는 이미지 객체(HTMLImageElement를 생성하는 브라우저 내장 생성자 함수)
-    if (!preview || !canvasRef.current) return Promise.resolve(null);     // preview나 canvasRef.current가 없으면 아무 작업도 하지 않고 null 반환
+    const canvasLayer = canvasRef.current;
+    if (!preview || !canvasLayer) return Promise.resolve(null);
 
-    img.src = preview;
+    const displayWidth = canvasLayer.width;
+    const displayHeight = canvasLayer.height;
 
-    return new Promise((resolve) => {                                     // 비동기 작업이 성공했을 때 resolve(), 실패을 때 reject()
-      img.onload = () => {                                                // img가 로드되면
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const ctx = canvas.getContext("2d");                              // HTML <canvas> 요소에서 그림을 그릴 수 있는 2D 컨텍스트를 가져오는 코드
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.src = preview;
+      img.onload = () => {
+        const mergedCanvas = document.createElement("canvas");
+        mergedCanvas.width = displayWidth;
+        mergedCanvas.height = displayHeight;
+
+        const ctx = mergedCanvas.getContext("2d");
         if (!ctx) return resolve(null);
 
-        ctx.drawImage(img, 0, 0);                                         // 먼저 배경 이미지 그리기
-        ctx.drawImage(canvasRef.current!, 0, 0);                          // 그 위에 사용자가 그린 캔버스 덮어 그리기
+        // 이미지도 렌더링된 사이즈 기준으로 그리기
+        ctx.drawImage(img, 0, 0, displayWidth, displayHeight);
+        ctx.drawImage(canvasLayer, 0, 0);  // 동일 사이즈니까 그대로 올리기
 
-        const merged = canvas.toDataURL("image/jpeg", 0.9);               // canvas.toDataURL("image/jpeg", 0.9)를 이용해 base64 이미지로 변환
-        resolve(merged);                                                  // 비동기 작업이 성공했을 때 merget 반환
+        const merged = mergedCanvas.toDataURL("image/jpeg", 0.9);
+        resolve(merged);
       };
+      img.onerror = () => resolve(null);
     });
   };
 
