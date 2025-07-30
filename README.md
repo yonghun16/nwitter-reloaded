@@ -1,24 +1,27 @@
-# Nwitter 클론코딩
+<div align="center">
 
-# 🚧 공사중 🚧
-https://nwitter-reloaded-95320.web.app/
+  ![header](https://capsule-render.vercel.app/api?type=waving&color=4078c0&height=180&section=header&text=Nwitter-clone&fontSize=45&animation=fadeIn&fontAlignY=38&desc=yonghun16&descAlignY=55&descAlign=85)
+  <a href="https://nwitter-reloaded-alpha.vercel.app/"><img src="https://github.com/yonghun16/nwitter-reloaded/blob/main/preview.gif?raw=true" width=800px /></a>
+	
+</div>
 
-### 추가할 기능
-- 구글 소셜 로그인 추가
+</br>
 
-- 포스트 수정 -> 모달 띄워 수정사항 입력 폼 만들기
-- 닉네임 수정 -> 모달 띄워 수정사항 입력 폼 만들기 
-  - 모달을 공통 컴포넌트로 만들기
-  - 모달 사용을 Custom hook으로 만들기
-- 댓글 기능 만들기(댓글은 수정, 삭제 가능, 이미지 첨부 불가)
+- **Nwitter - Clone**
+- 소셜 로그인, 트윗(글, 사진) 올리기, 수정, 삭제, 회원정보 수정, 좋아요, 검색
+- Single-page
 
-- redux를 사용해 컴포넌트간 상태 변경하기
-- redux를 사용해 테마 변경 기능 만들기
 
-- 회원탈퇴 기능 만들기
-
-- 왼쪽 sidebar 만들기->포스트 검색 기능 만들기
-
-- 좀 더 x.com에 맞게 외관 꾸미기
-  - 오른쪽 하단에 아바타보이기 -> 누르면 로그아웃 할건지 물어보기
-  - 반응형 추가하기
+#### Powerd by
+<div>
+  <!-- HTML --><a href="https://html.spec.whatwg.org/"><img src="https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=HTML5&logoColor=white" /></a>
+  <!-- CSS --><a href="https://www.w3.org/Style/CSS/"><img src="https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=CSS3&logoColor=white" /></a>
+  <!-- TypeScript --><a href="https://www.typescriptlang.org"><img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=TypeScript&logoColor=white" /></a>
+  <!-- React --><a href="https://reactjs.org/"><img src="https://img.shields.io/badge/React-58B4CD?style=flat&logo=React&logoColor=white" /></a>
+  <!-- Styled Components --><a href="https://styled-components.com/"><img src="https://img.shields.io/badge/styled%20components-DB7093?style=flat&logo=Styled%20Components&logoColor=white" /></a>
+  <br />
+  <!-- Firebase --><a href="https://firebase.google.com"/><img src="https://img.shields.io/badge/Firebase-DD2C00?style=flat&logo=Firebase&logoColor=white" /></a>
+  <!-- Vercel --><a href="https://vercel.com/"><img src="https://img.shields.io/badge/Vercel-000000?style=flat&logo=Vercel&logoColor=white" /></a>
+  <br />
+  <!-- Cursor --><a href="https://www.cursor.com"><img src="https://img.shields.io/badge/Cursor-000000?style=flat&logo=Cursor&logoColor=white" /></a>
+</div>
