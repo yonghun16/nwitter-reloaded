@@ -9,18 +9,18 @@ import { useState } from "react";
 
 const Wrapper = styled.div`
   display: grid;
-  grid-template-columns: 1fr minmax(350px, 600px) 1fr;
+  grid-template-columns: 1fr minmax(500px, 700px) 1fr;
   height: 100vh;
   width: 100vw;
   background: #000;
   font-family: 'Segoe UI', 'Apple SD Gothic Neo', 'Roboto', 'sans-serif';
   column-gap: 40px;
-  @media (max-width: 900px) {
-    grid-template-columns: 1fr minmax(350px, 600px);
+  @media (max-width: 1200px) {
+    grid-template-columns: 1fr minmax(350px, 700px) 1fr;
     column-gap: 24px;
   }
-  @media (max-width: 700px) {
-    grid-template-columns: 1fr;
+  @media (max-width: 900px) {
+    grid-template-columns: minmax(0, 1fr);
     column-gap: 0;
   }
 `;
@@ -124,19 +124,26 @@ const Center = styled.main`
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  min-width: 350px;
+  max-width: 700px;
+  margin: 0 auto;
   padding-top: 36px;
   padding-bottom: 36px;
   padding-left: 24px;
   padding-right: 24px;
-  @media (max-width: 900px) {
+  @media (max-width: 1200px) {
+    min-width: 320px;
+    max-width: 700px;
     padding-left: 12px;
     padding-right: 12px;
     padding-top: 24px;
     padding-bottom: 24px;
   }
-  @media (max-width: 700px) {
+  @media (max-width: 900px) {
+    min-width: 0;
+    max-width: 100vw;
     border: none;
-    padding: 16px 0 16px 0;
+    padding: 16px 8px 16px 8px;
   }
 `;
 
