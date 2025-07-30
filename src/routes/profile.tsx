@@ -364,16 +364,21 @@ export default function Profile() {
 
     setIsSaving(true);
     try {
-      // Firestore에 사용자 정보 업데이트
+      // Firestore에 사용자 정보 업데이트 (이것은 항상 성공해야 함)
       await setDoc(doc(db, "users", user.uid), {
         displayName: editName.trim(),
         updatedAt: Date.now(),
       }, { merge: true });
 
-      // Firebase Auth의 displayName 업데이트
-      await updateProfile(user, {
-        displayName: editName.trim()
-      });
+      // Firebase Auth의 displayName 업데이트 (실패할 수 있음)
+      try {
+        await updateProfile(user, {
+          displayName: editName.trim()
+        });
+      } catch (authError) {
+        console.warn("Firebase Auth update failed, but Firestore update succeeded:", authError);
+        // Auth 업데이트가 실패해도 Firestore 업데이트는 성공했으므로 계속 진행
+      }
 
       setIsEditModalOpen(false);
       alert("프로필이 성공적으로 수정되었습니다.");
