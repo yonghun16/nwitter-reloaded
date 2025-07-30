@@ -6,6 +6,7 @@ import reset from "styled-reset"
 import { auth } from "./firebase"
 import styled from "styled-components"
 import { onAuthStateChanged, getRedirectResult, User } from "firebase/auth";
+import { Toaster } from "react-hot-toast";
 /* components import */
 import Layout from "./components/layout"
 import LoadingScreen from "./components/loading-screen"
@@ -87,10 +88,11 @@ function App() {
   return (
     <Wrapper>
       <GlobalStyles />
-      {isLoading 
-        ? <LoadingScreen /> 
+      {isLoading
+        ? <LoadingScreen />
         : <RouterProvider router={router} />
       }
+      <Toaster />
     </Wrapper>
   )
 }

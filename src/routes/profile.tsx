@@ -8,6 +8,7 @@ import styled from "styled-components";
 import compressImage from "../components/compress-img";
 import { ITweet } from "../components/timeline";
 import Tweet from "../components/tweet";
+import toast from "react-hot-toast";
 
 
 /* styled components */
@@ -381,7 +382,7 @@ export default function Profile() {
       }
 
       setIsEditModalOpen(false);
-      alert("프로필이 성공적으로 수정되었습니다.");
+      toast.success("프로필이 성공적으로 수정되었습니다.");
       
       // Vercel 환경에서 안전한 방법으로 페이지 새로고침
       try {
@@ -396,7 +397,7 @@ export default function Profile() {
       }
     } catch (error) {
       console.error("Error updating profile:", error);
-      alert("프로필 수정에 실패했습니다.");
+      toast.error("프로필 수정에 실패했습니다.");
     } finally {
       setIsSaving(false);
     }
