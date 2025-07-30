@@ -5,6 +5,8 @@ import { auth, db } from "../firebase";
 import { deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { useState } from "react";
 import compressImage from "./compress-img";
+import ReplyList, { useReplyCount } from "./reply-list";
+import ReplyForm from "./reply-form";
 
 
 /* styled components */
@@ -125,6 +127,19 @@ const RemoveImageButton = styled.button`
   margin-left: 8px;
 `;
 
+const ReplyButton = styled.button`
+  background: none;
+  color: #1d9bf0;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+  margin-right: 8px;
+  padding: 0;
+  &:hover { text-decoration: underline; }
+`;
+
 
 /* Tweet component */
 export default function Tweet({ username, image, tweet, userId, id }: ITweet) {    // props
@@ -134,6 +149,8 @@ export default function Tweet({ username, image, tweet, userId, id }: ITweet) { 
   const [editImage, setEditImage] = useState<string | undefined>(image);
   const [isSaving, setIsSaving] = useState(false);
   const [isImgLoading, setImgLoading] = useState(false);
+  const [showReplies, setShowReplies] = useState(false);
+  const replyCount = useReplyCount(id);
 
   // onDelete function
   const onDelete = async () => {
@@ -186,12 +203,23 @@ export default function Tweet({ username, image, tweet, userId, id }: ITweet) { 
       <Column>
         <Username>{username}</Username>
         <Payload>{tweet}</Payload>
-        {user?.uid === userId ? (
+        <div style={{display:'flex', alignItems:'center', gap:8}}>
+          <ReplyButton onClick={() => setShowReplies(v => !v)}>
+            댓글{replyCount > 0 ? `(${replyCount})` : ""}
+          </ReplyButton>
+          {user?.uid === userId ? (
+            <>
+              <DeleteButton onClick={onDelete}>Delete</DeleteButton>
+              <EditButton onClick={() => setEditOpen(true)}>Edit</EditButton>
+            </>
+          ) : null}
+        </div>
+        {showReplies && (
           <>
-            <DeleteButton onClick={onDelete}>Delete</DeleteButton>
-            <EditButton onClick={() => setEditOpen(true)}>Edit</EditButton>
+            <ReplyList tweetId={id} />
+            <ReplyForm tweetId={id} />
           </>
-        ) : null}
+        )}
       </Column>
 
       <Column>

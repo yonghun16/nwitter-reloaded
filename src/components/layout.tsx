@@ -50,7 +50,9 @@ const Menu = styled.div`
   gap: 8px;
   align-items: flex-start;
 `;
-const MenuItem = styled.div<{active?: boolean}>`
+const MenuItem = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== 'active'
+})<{active?: boolean}>`
   cursor: pointer;
   display: flex;
   align-items: center;
