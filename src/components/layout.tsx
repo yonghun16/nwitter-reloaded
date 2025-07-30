@@ -147,6 +147,39 @@ const Center = styled.main`
   }
 `;
 
+const MobileHeader = styled.div`
+  display: none;
+  @media (max-width: 900px) {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2000;
+    background: #000;
+    border-bottom: 1px solid #222;
+    width: 100vw;
+    justify-content: center;
+    padding: 0;
+  }
+`;
+const MobileFooter = styled.div`
+  display: none;
+  @media (max-width: 900px) {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 2000;
+    background: #000;
+    border-top: 1px solid #222;
+    width: 100vw;
+    justify-content: center;
+    padding: 0;
+  }
+`;
+
 function SidebarLeft({ onLogOut }: { onLogOut: () => void }) {
   const location = useLocation();
   return (
@@ -224,10 +257,20 @@ export default function Layout() {
 
   return (
     <Wrapper>
+      {/* 데스크탑/태블릿: 기존 사이드바 */}
       <SidebarLeft onLogOut={onLogOut} />
       <Center>
+        {/* 모바일: 상단 메뉴 */}
+        <MobileHeader>
+          <SidebarLeft onLogOut={onLogOut} />
+        </MobileHeader>
         <Outlet />
+        {/* 모바일: 하단 메뉴 */}
+        <MobileFooter>
+          <SidebarRight />
+        </MobileFooter>
       </Center>
+      {/* 데스크탑/태블릿: 기존 사이드바 */}
       <SidebarRight />
       {isConfirmModalOpen && (
         <ConfirmModal
