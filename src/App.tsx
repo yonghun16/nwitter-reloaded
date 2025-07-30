@@ -5,6 +5,7 @@ import { createGlobalStyle } from "styled-components"
 import reset from "styled-reset"
 import { auth } from "./firebase"
 import styled from "styled-components"
+import { onAuthStateChanged, getRedirectResult, User } from "firebase/auth";
 /* components import */
 import Layout from "./components/layout"
 import LoadingScreen from "./components/loading-screen"
@@ -38,55 +39,51 @@ const Wrapper = styled.div`
 `;
 
 
-/* router Layout */
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: (
-      <ProtectedRoute>
-        <Layout />
-      </ProtectedRoute>
-    ),
-    children: [
-      {
-        path: "",
-        element: <Home />,
-      },
-      {
-        path: "profile",
-        element: <Profile />,
-      }
-    ],
-  },
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/create-account",
-    element: <CreateAccount />,
-  }
-])
-
-
 /* App 컴포넌트 */
 function App() {
-  // 로딩 상태
+  const [user, setUser] = useState<User | null>(null);
   const [isLoading, setLoading] = useState(true);
 
-  // 앱 초기화
-  const init = async () => {
-    // wait for firebase
-    await auth.authStateReady();
-    setLoading(false);
-  }
-
-  // 처음 시작할 때 파이어베이스를 셋팅하고, 파이어베이스 셋팅 후 로딩 상태를 끝내기
   useEffect(() => {
-    init();
-  }, [])
+    getRedirectResult(auth).finally(() => {
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        setUser(user);
+        setLoading(false);
+      });
+      return () => unsubscribe();
+    });
+  }, []);
 
-  // render
+  // 라우터를 함수 내부에서 생성하여 user, isLoading을 동적으로 전달
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: (
+        <ProtectedRoute user={user} isLoading={isLoading}>
+          <Layout />
+        </ProtectedRoute>
+      ),
+      children: [
+        {
+          path: "",
+          element: <Home />,
+        },
+        {
+          path: "profile",
+          element: <Profile />,
+        }
+      ],
+    },
+    {
+      path: "/login",
+      element: <Login />,
+    },
+    {
+      path: "/create-account",
+      element: <CreateAccount />,
+    }
+  ]);
+
   return (
     <Wrapper>
       <GlobalStyles />

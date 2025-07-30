@@ -5,6 +5,7 @@ import { auth } from "../firebase";
 import { FirebaseError } from "firebase/app";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import GithubButton from "../components/github-btn";
+import GoogleButton from "../components/google-btn";
 // styled components
 import { Error, Form, Input, Switcher, Title, Wrapper } from "../components/auth-components";
 
@@ -85,6 +86,7 @@ export default function CreateAccount() {
       </Switcher>
 
       <GithubButton />
+      <GoogleButton />
 
     </Wrapper>
   )

@@ -6,6 +6,7 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 import { Link } from "react-router-dom";
 import GithubButton from "../components/github-btn";
+import GoogleButton from "../components/google-btn";
 // styled components
 import { Error, Form, Input, Switcher, Title, Wrapper, } from "../components/auth-components";
 
@@ -126,6 +127,7 @@ export default function CreateAccount() {
 
       {/* Github 로그인 버튼*/}
       <GithubButton />
+      <GoogleButton />
 
     </Wrapper>
   )
