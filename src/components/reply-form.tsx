@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { db, auth } from "../firebase";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { collection, addDoc } from "firebase/firestore";
 import styled from "styled-components";
 
 const Form = styled.form`

@@ -1,6 +1,6 @@
 /* library import */
 import { Outlet, Link, useNavigate, useLocation } from "react-router-dom"
-import styled, { css } from "styled-components"
+import styled from "styled-components"
 import { auth } from "../firebase"
 import SearchBox from "./search-box";
 
