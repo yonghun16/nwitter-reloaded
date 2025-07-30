@@ -9,6 +9,7 @@ import ReplyList, { useReplyCount } from "./reply-list";
 import ReplyForm from "./reply-form";
 import LikeButtonComponent from "./like-button";
 import toast from "react-hot-toast";
+import ConfirmModal from "./confirm-modal";
 
 
 /* styled components */
@@ -147,7 +148,7 @@ const ReplyButton = styled.button`
 
 
 /* Tweet component */
-export default function Tweet({ username, image, tweet, userId, id }: ITweet) {    // props
+export default function Tweet({ username, image, tweet, userId, id }: ITweet) {
   const user = auth.currentUser;                  // 현재 로그인된 사용자의 정보 불러옴
   const [isEditOpen, setEditOpen] = useState(false);
   const [editValue, setEditValue] = useState(tweet);
@@ -155,22 +156,34 @@ export default function Tweet({ username, image, tweet, userId, id }: ITweet) { 
   const [isSaving, setIsSaving] = useState(false);
   const [isImgLoading, setImgLoading] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const replyCount = useReplyCount(id);
 
   // onDelete function
   const onDelete = async () => {
-    const ok = confirm("Are you sure?");
-
-    if (!ok || !user || user?.uid !== userId) return;
+    if (!user || user?.uid !== userId) return;
 
     try {
       await deleteDoc(doc(db, "tweets", id));     // Firestore의 document를 삭제
+      toast.success("트윗이 삭제되었습니다.");
     } catch(error) {
       console.log(error);
-    } finally {
-
+      toast.error("트윗 삭제에 실패했습니다.");
     }
-  }
+  };
+
+  const handleDeleteClick = () => {
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    onDelete();
+    setIsDeleteModalOpen(false);
+  };
+
+  const handleCancelDelete = () => {
+    setIsDeleteModalOpen(false);
+  };
 
   // 이미지 변경 핸들러
   const onImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -216,7 +229,7 @@ export default function Tweet({ username, image, tweet, userId, id }: ITweet) { 
           <LikeButtonComponent tweetId={id} />
           {user?.uid === userId ? (
             <>
-              <DeleteButton onClick={onDelete}>Delete</DeleteButton>
+              <DeleteButton onClick={handleDeleteClick}>Delete</DeleteButton>
               <EditButton onClick={() => setEditOpen(true)}>Edit</EditButton>
             </>
           ) : null}
@@ -258,6 +271,18 @@ export default function Tweet({ username, image, tweet, userId, id }: ITweet) { 
             </ModalButtonRow>
           </ModalContent>
         </ModalOverlay>
+      )}
+      {isDeleteModalOpen && (
+        <ConfirmModal
+          isOpen={isDeleteModalOpen}
+          title="트윗 삭제"
+          message="정말로 이 트윗을 삭제하시겠습니까?"
+          confirmText="삭제"
+          cancelText="취소"
+          onConfirm={handleConfirmDelete}
+          onCancel={handleCancelDelete}
+          isDanger={true}
+        />
       )}
     </Wrapper>
   )

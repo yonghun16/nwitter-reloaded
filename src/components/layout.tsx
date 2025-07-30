@@ -4,6 +4,8 @@ import styled from "styled-components"
 import { auth } from "../firebase"
 import SearchBox from "./search-box";
 import toast from "react-hot-toast";
+import ConfirmModal from "./confirm-modal";
+import { useState } from "react";
 
 const Wrapper = styled.div`
   display: grid;
@@ -193,7 +195,13 @@ function SidebarRight() {
 
 export default function Layout() {
   const navigate = useNavigate();
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+
   const onLogOut = async () => {
+    setIsConfirmModalOpen(true);
+  };
+
+  const handleConfirmLogOut = async () => {
     try {
       await auth.signOut();
       toast.success("로그아웃되었습니다.");
@@ -202,6 +210,11 @@ export default function Layout() {
       toast.error("로그아웃에 실패했습니다.");
     }
   };
+
+  const handleCancelLogOut = () => {
+    setIsConfirmModalOpen(false);
+  };
+
   return (
     <Wrapper>
       <SidebarLeft onLogOut={onLogOut} />
@@ -209,6 +222,15 @@ export default function Layout() {
         <Outlet />
       </Center>
       <SidebarRight />
+      {isConfirmModalOpen && (
+        <ConfirmModal
+          isOpen={isConfirmModalOpen}
+          title="로그아웃"
+          message="정말로 로그아웃하시겠습니까?"
+          onConfirm={handleConfirmLogOut}
+          onCancel={handleCancelLogOut}
+        />
+      )}
     </Wrapper>
   );
 }
