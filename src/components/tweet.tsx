@@ -7,27 +7,28 @@ import { useState } from "react";
 import compressImage from "./compress-img";
 import ReplyList, { useReplyCount } from "./reply-list";
 import ReplyForm from "./reply-form";
+import LikeButtonComponent from "./like-button";
 
 
 /* styled components */
 const Wrapper = styled.div`
-  display: grid;
-  grid-template-columns: 3fr 1fr;
+  display: flex;
+  flex-direction: column;
   padding: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: #000;
 `;
 
 const Column = styled.div`
-  &:last-child {
-    place-self: end;
-  }
+  width: 100%;
 `;
 
 const Photo = styled.img`
-  width: 100px;
-  height: 100px;
+  width: 100%;
+  max-width: 500px;
+  height: auto;
   border-radius: 15px;
+  margin-top: 12px;
 `;
 
 const Username = styled.span`
@@ -131,13 +132,16 @@ const ReplyButton = styled.button`
   background: none;
   color: #1d9bf0;
   border: none;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  margin-top: 8px;
-  margin-right: 8px;
-  padding: 0;
-  &:hover { text-decoration: underline; }
+  padding: 5px 10px;
+  border-radius: 5px;
+  text-transform: uppercase;
+  &:hover { 
+    background: rgba(29,155,240,0.1);
+    text-decoration: none;
+  }
 `;
 
 
@@ -199,14 +203,15 @@ export default function Tweet({ username, image, tweet, userId, id }: ITweet) { 
   // render
   return (
     <Wrapper>
-
       <Column>
         <Username>{username}</Username>
         <Payload>{tweet}</Payload>
-        <div style={{display:'flex', alignItems:'center', gap:8}}>
+        {image && <Photo src={`${image}`} />}
+        <div style={{display:'flex', alignItems:'center', gap:8, marginTop: '12px'}}>
           <ReplyButton onClick={() => setShowReplies(v => !v)}>
             댓글{replyCount > 0 ? `(${replyCount})` : ""}
           </ReplyButton>
+          <LikeButtonComponent tweetId={id} />
           {user?.uid === userId ? (
             <>
               <DeleteButton onClick={onDelete}>Delete</DeleteButton>
@@ -220,10 +225,6 @@ export default function Tweet({ username, image, tweet, userId, id }: ITweet) { 
             <ReplyForm tweetId={id} />
           </>
         )}
-      </Column>
-
-      <Column>
-        {image ? <Photo src={`${image}`} /> : null}
       </Column>
       {isEditOpen && (
         <ModalOverlay>

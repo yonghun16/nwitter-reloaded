@@ -2,6 +2,7 @@
 import { Outlet, Link, useNavigate, useLocation } from "react-router-dom"
 import styled, { css } from "styled-components"
 import { auth } from "../firebase"
+import SearchBox from "./search-box";
 
 const Wrapper = styled.div`
   display: grid;
@@ -171,6 +172,7 @@ function SidebarLeft({ onLogOut }: { onLogOut: () => void }) {
 function SidebarRight() {
   return (
     <SidebarRightBox>
+      <SearchBox />
       <TrendBox>
         <b style={{fontSize:'17px'}}>트렌드</b>
         <ul style={{margin:'16px 0 0 0', padding:0, listStyle:'none', color:'#aaa', fontSize:'14px'}}>

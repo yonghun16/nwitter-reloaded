@@ -10,9 +10,8 @@ import Tweet from "./tweet";
 /* styled components */
 const Wrapper = styled.div`
   display: flex;
-  gap: 10px;
+  gap: 0;
   flex-direction: column;
-  overflow-y: scroll;
 `;
 
 
