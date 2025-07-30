@@ -8,6 +8,7 @@ import compressImage from "./compress-img";
 import ReplyList, { useReplyCount } from "./reply-list";
 import ReplyForm from "./reply-form";
 import LikeButtonComponent from "./like-button";
+import toast from "react-hot-toast";
 
 
 /* styled components */
@@ -180,7 +181,7 @@ export default function Tweet({ username, image, tweet, userId, id }: ITweet) { 
       const base64 = await compressImage(file);
       setEditImage(base64);
     } catch (err) {
-      alert("이미지 처리 실패");
+      toast.error("이미지 처리 실패");
     } finally {
       setImgLoading(false);
     }
@@ -193,8 +194,9 @@ export default function Tweet({ username, image, tweet, userId, id }: ITweet) { 
     try {
       await updateDoc(doc(db, "tweets", id), { tweet: editValue, image: editImage ?? "" });
       setEditOpen(false);
+      toast.success("트윗이 수정되었습니다.");
     } catch (error) {
-      alert("수정 실패: " + (error as Error).message);
+      toast.error("수정 실패: " + (error as Error).message);
     } finally {
       setIsSaving(false);
     }

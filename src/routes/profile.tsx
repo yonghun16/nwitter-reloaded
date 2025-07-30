@@ -351,11 +351,11 @@ export default function Profile() {
       // 사용자 계정 삭제
       await deleteUser(user);
 
-      alert("계정이 성공적으로 삭제되었습니다.");
+      toast.success("계정이 성공적으로 삭제되었습니다.");
       navigate("/"); // 홈으로 리다이렉트
     } catch (error) {
       console.error("Error deleting account:", error);
-      alert("계정 삭제에 실패했습니다.");
+      toast.error("계정 삭제에 실패했습니다.");
     }
   };
 

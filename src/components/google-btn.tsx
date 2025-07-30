@@ -2,6 +2,7 @@ import { auth } from "../firebase";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import toast from "react-hot-toast";
 
 const Button = styled.span`
   margin-top: 10px;
@@ -33,7 +34,7 @@ export default function GoogleButton() {
       await signInWithPopup(auth, provider);
       navigate("/"); // 로그인 성공 시 홈으로 이동
     } catch (error) {
-      alert("구글 로그인 실패: " + (error as Error).message);
+      toast.error("구글 로그인 실패: " + (error as Error).message);
     }
   };
 

@@ -3,6 +3,7 @@ import { Outlet, Link, useNavigate, useLocation } from "react-router-dom"
 import styled from "styled-components"
 import { auth } from "../firebase"
 import SearchBox from "./search-box";
+import toast from "react-hot-toast";
 
 const Wrapper = styled.div`
   display: grid;
@@ -193,10 +194,12 @@ function SidebarRight() {
 export default function Layout() {
   const navigate = useNavigate();
   const onLogOut = async () => {
-    const ok = confirm("Are you sure?");
-    if (ok) {
+    try {
       await auth.signOut();
+      toast.success("로그아웃되었습니다.");
       navigate("/login");
+    } catch (error) {
+      toast.error("로그아웃에 실패했습니다.");
     }
   };
   return (
