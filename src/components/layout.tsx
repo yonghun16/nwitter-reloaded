@@ -143,7 +143,7 @@ const Center = styled.main`
     min-width: 0;
     max-width: 100vw;
     border: none;
-    padding: 16px 8px 16px 8px;
+    padding: 16px 0px 16px 0px;
   }
 `;
 
