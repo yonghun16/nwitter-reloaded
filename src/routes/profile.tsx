@@ -382,8 +382,18 @@ export default function Profile() {
 
       setIsEditModalOpen(false);
       alert("프로필이 성공적으로 수정되었습니다.");
-      // 페이지 새로고침으로 변경사항 반영
-      window.location.reload();
+      
+      // Vercel 환경에서 안전한 방법으로 페이지 새로고침
+      try {
+        // 먼저 navigate 시도
+        navigate(window.location.pathname, { replace: true });
+      } catch (navError) {
+        // navigate 실패 시 window.location.href 사용
+        console.warn("Navigation failed, using window.location.href:", navError);
+        setTimeout(() => {
+          window.location.href = window.location.pathname;
+        }, 100);
+      }
     } catch (error) {
       console.error("Error updating profile:", error);
       alert("프로필 수정에 실패했습니다.");
