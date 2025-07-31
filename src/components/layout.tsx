@@ -133,17 +133,19 @@ const Center = styled.main`
   min-width: 350px;
   max-width: 700px;
   margin: 0 auto;
+  padding: 32px 24px;
   
   @media (max-width: 1200px) {
     min-width: 320px;
     max-width: 700px;
+    padding: 32px 12px;
   }
   @media (max-width: 900px) {
     min-width: 0;
     max-width: 100vw;
     border: none;
-    padding-top: 60px;
-    padding-bottom: 24px; 
+    /* 모바일에서는 고정 헤더 높이만큼 상단 여백, 하단은 24px로 재설정 */
+    padding: 60px 16px 24px 16px;
   }
 `;
 
@@ -188,7 +190,6 @@ const MobileHeader = styled.header`
   }
 `;
 
-/* ✅ [삭제] 모바일 화면에서 오른쪽 사이드바를 보이지 않게 하기 위해 관련 코드를 모두 제거했습니다. */
 
 // SidebarLeft 컴포넌트의 MenuItem에 텍스트를 span으로 감싸줍니다.
 function SidebarLeft({ onLogOut }: { onLogOut: () => void }) {
